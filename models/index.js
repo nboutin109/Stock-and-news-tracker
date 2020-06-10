@@ -35,3 +35,26 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
+
+
+
+// Template for our models (just replace 'Todo' with name of model, then add
+// sequelize information in the middle)
+
+
+// module.exports = function(sequelize, DataTypes) {
+//   var Todo = sequelize.define("Todo", {
+//     text: {
+//       type: DataTypes.STRING,
+//       allowNull: false,
+//       validate: {
+//         len: [1, 140]
+//       }
+//     },
+//     complete: {
+//       type: DataTypes.BOOLEAN,
+//       defaultValue: false
+//     }
+//   });
+//   return Todo;
+// };
