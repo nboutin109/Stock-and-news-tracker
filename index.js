@@ -14,6 +14,7 @@ app.use(express.json())
 
 
 // API key - pk_c31bdade5c47425fafb25d4831e9861e //
+// NYT API - QzKMS3OtIrTljBwjuddSWl23yFk5P70N
 
 // create call_api function //
 function call_api(finishedAPI, ticker) {
@@ -42,10 +43,23 @@ const fetchApiInfo = async (url) => {
       })
     })
     return Promise.all(requests) // Waiting for all the requests to get resolved.
-   }
+   };
    //invoke fetch user info
    // fetchUserInfo([‘fb’, ‘tsla’, ‘aapl’])
    // .then(a => console.log(JSON.stringify(a)))
+
+   
+
+   const fetchNewsInfo = async (tickers) => {
+    const requests = tickers.map((ticker) => {
+     const url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + ticker + '&facet_fields=source&facet=true&begin_date=20200601&end_date=20200625&api-key=QzKMS3OtIrTljBwjuddSWl23yFk5P70N'
+     return fetchApiInfo(url) // Async function that fetches the user info.
+      .then((res) => {
+      return res 
+      })
+    })
+    return Promise.all(requests) // Waiting for all the requests to get resolved.
+   };
 
 // Setting the handlebars middleware //
 app.engine('handlebars', exphbs());
@@ -90,6 +104,16 @@ app.get('/portfolio.html', async function (req, res) {
     console.log(results);
     res.render('portfolio', results);
   });
+
+  app.get('/news.html', async function (req, res) {
+    const data = await fetchNewsInfo(['facebook', 'tesla', 'apple']);
+    const results = {};
+    results.response = data; 
+    console.log(results);
+    res.render('news', results);
+  });
+//response.response.docs[0].web_url
+
 // Set a static folder //
 app.use(express.static(path.join(__dirname, 'public')));
 

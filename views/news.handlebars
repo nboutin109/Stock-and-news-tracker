@@ -1,0 +1,12 @@
+<div class=“jumbotron”>
+   <h1 class=“display-2">Recent company news about your stocks</h1>
+
+
+
+{{#each response}}
+<div>
+<strong>Recent company news:{{this.response.docs.[0].web_url}}</strong>
+<strong>company news</strong>
+</div>
+{{/each}}
+
