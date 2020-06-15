@@ -1,16 +1,24 @@
 const express = require('express');
 const app = express();
-const exphbs  = require('express-handlebars');
-const path = require('path');
+const exphbs = require('express-handlebars');
 const request = require('request');
-// const bodyParser = require('body-parser');
 const axios = require('axios');
-
+var passport = require("./config/passport");
+var db = require("./models");
+var session = require("express-session");
+const isAuthenticated = require('./config/middleware/isAuthenticated');
 
 const PORT = process.env.PORT || 5000;
 
-app.use(express.urlencoded({extended: true}));
-app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static("public"));
+
+
+// Need to use sessions to keep track of a user's login status //
+app.use(session({ secret: "keyboard cat", resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // API key - pk_c31bdade5c47425fafb25d4831e9861e //
@@ -18,103 +26,141 @@ app.use(express.json())
 
 // create call_api function //
 function call_api(finishedAPI, ticker) {
-    request('https://cloud.iexapis.com/stable/stock/' + ticker + '/quote?token=pk_c31bdade5c47425fafb25d4831e9861e', { json: true }, (err, res, body) => {
-        if (err) {return console.log(err);}
-        if (res.statusCode === 200){
-            //console.log(body);
-            finishedAPI(body);
-           };
-        });
+  request('https://cloud.iexapis.com/stable/stock/' + ticker + '/quote?token=pk_c31bdade5c47425fafb25d4831e9861e', { json: true }, (err, res, body) => {
+    if (err) { return console.log(err); }
+    if (res.statusCode === 200) {
+      //console.log(body);
+      finishedAPI(body);
+    };
+  });
 };
 
 //multiple API calls
 const fetchApiInfo = async (url) => {
-    console.log(`Fetching ${url}`)
-    const stockInfo = await axios(url) // API call 
-    return stockInfo.data;
-   }
-   // Iterates through array and return stock info
-   const fetchUserInfo = async (tickers) => {
-    const requests = tickers.map((ticker) => {
-     const url = `https://cloud.iexapis.com/stable/stock/` + ticker + `/quote?token=pk_c31bdade5c47425fafb25d4831e9861e`
-     return fetchApiInfo(url) // Async function that fetches the user info.
+  console.log(`Fetching ${url}`)
+  const stockInfo = await axios(url) // API call 
+  return stockInfo.data;
+}
+// Iterates through array and return stock info
+const fetchUserInfo = async (tickers) => {
+  const requests = tickers.map((ticker) => {
+    const url = `https://cloud.iexapis.com/stable/stock/` + ticker + `/quote?token=pk_c31bdade5c47425fafb25d4831e9861e`
+    return fetchApiInfo(url) // Async function that fetches the user info.
       .then((res) => {
-      return res 
+        return res
       })
-    })
-    return Promise.all(requests) // Waiting for all the requests to get resolved.
-   };
-   //invoke fetch user info
-   // fetchUserInfo([‘fb’, ‘tsla’, ‘aapl’])
-   // .then(a => console.log(JSON.stringify(a)))
+  })
+  return Promise.all(requests) // Waiting for all the requests to get resolved.
+};
+//invoke fetch user info
+// fetchUserInfo([‘fb’, ‘tsla’, ‘aapl’])
+// .then(a => console.log(JSON.stringify(a)))
 
-   
 
-   const fetchNewsInfo = async (tickers) => {
-    const requests = tickers.map((ticker) => {
-     const url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + ticker + '&facet_fields=source&facet=true&begin_date=20200601&end_date=20200625&api-key=QzKMS3OtIrTljBwjuddSWl23yFk5P70N'
-     return fetchApiInfo(url) // Async function that fetches the user info.
+
+const fetchNewsInfo = async (tickers) => {
+  const requests = tickers.map((ticker) => {
+    const url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + ticker + '&facet_fields=source&facet=true&begin_date=20200601&end_date=20200625&api-key=QzKMS3OtIrTljBwjuddSWl23yFk5P70N'
+    return fetchApiInfo(url) // Async function that fetches the user info.
       .then((res) => {
-      return res 
+        return res
       })
-    })
-    return Promise.all(requests) // Waiting for all the requests to get resolved.
-   };
+  })
+  return Promise.all(requests) // Waiting for all the requests to get resolved.
+};
 
 // Setting the handlebars middleware //
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
-const otherstuff = "hello there, this is other stuff!";
-
 // Set handlebar index get route //
-app.get('/', function (req, res) {
-    call_api(function(doneAPI) {
-        res.render('home', { 
-            stock: doneAPI
-         });
-    }, "fb");
-   
+app.get('/members', isAuthenticated, function (req, res) {
+  call_api(function (doneAPI) {
+    res.render('home', {
+      stock: doneAPI
+    });
+  }, "fb");
+});
+
+// // Here we've add our isAuthenticated middleware to this route.
+// // If a user who is not logged in tries to access this route they will be redirected to the signup page
+// app.get("/members", isAuthenticated, function (req, res) {
+//   res.redirect("/");
+// });
+
+// In case the above "GET" doesn't work properly, you can use the one below instead.
+
+// app.get('/', function (req, res) {
+//   if (!req.user) {
+//     res.redirect("/login");
+//   } else {
+//     call_api(function (doneAPI) {
+//       res.render('home', {
+//         stock: doneAPI
+//       });
+//     }, "fb");
+//   }
+// });
+
+// Create about page route //
+app.get('/about', async function (req, res) {
+  if (!req.user) {
+    res.redirect("/login");
+  } else {
+    const data = await fetchUserInfo(['fb', 'tsla', 'aapl']);
+    const results = {};
+    results.stocks = data;
+    console.log(results);
+    res.render('portfolio', results);
+  }
+});
+
+app.get('/portfolio', async function (req, res) {
+  if (!req.user) {
+    res.redirect("/login");
+  } else {
+    const data = await fetchUserInfo(['fb', 'tsla', 'aapl']);
+    const results = {};
+    results.stocks = data;
+    console.log(results);
+    res.render('portfolio', results);
+  }
+});
+
+app.get('/news', async function (req, res) {
+  if (!req.user) {
+    res.redirect("/login");
+  } else {
+    const data = await fetchNewsInfo(['facebook', 'tesla', 'apple']);
+    const results = {};
+    results.response = data;
+    console.log(results);
+    res.render('news', results);
+  }
 });
 
 // Set handlebar index post route //
 app.post('/', function (req, res) {
-    call_api(function(doneAPI) {
-     //posted_stuff = req.body.stock_ticker;//
-        res.render('home', { 
-            stock: doneAPI,
-        });
-    }, req.body.stock_ticker);
+  call_api(function (doneAPI) {
+    //posted_stuff = req.body.stock_ticker;//
+    res.render('home', {
+      stock: doneAPI,
+    });
+  }, req.body.stock_ticker);
 
 });
 
-// Create about page route //
-app.get('/about.html', async function (req, res) {
-    const data = await fetchUserInfo(['fb', 'tsla', 'aapl']);
-    const results = {};
-    results.stocks = data; 
-    console.log(results);
-    res.render('portfolio', results);
+// Requring all the routes in our code //
+
+require("./routes/api-routes.js")(app);
+require("./routes/html-routes.js")(app);
+
+db.sequelize.sync().then(function () {
+  app.listen(PORT, function () {
+    console.log(
+      "==> Listening on port %s. Visit http://localhost:%s/ in your browser.",
+      PORT,
+      PORT
+    );
   });
-
-app.get('/portfolio.html', async function (req, res) {
-    const data = await fetchUserInfo(['fb', 'tsla', 'aapl']);
-    const results = {};
-    results.stocks = data; 
-    console.log(results);
-    res.render('portfolio', results);
-  });
-
-  app.get('/news.html', async function (req, res) {
-    const data = await fetchNewsInfo(['facebook', 'tesla', 'apple']);
-    const results = {};
-    results.response = data; 
-    console.log(results);
-    res.render('news', results);
-  });
-//response.response.docs[0].web_url
-
-// Set a static folder //
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.listen(PORT, () => console.log('Server is listening on port ' + PORT));
+});
