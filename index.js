@@ -102,6 +102,7 @@ app.get('/', function (req, res) {
   }
 });
 
+
 // Create about page route //
 app.get('/about', async function (req, res) {
   if (!req.user) {
