@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "Momandme1!@",
-    "database": "user_db",
+    "database": "userDB",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "operatorsAliases": false
