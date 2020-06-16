@@ -143,11 +143,11 @@ app.post('/', function (req, res) {
 require("./routes/api-routes.js")(app);
 require("./routes/html-routes.js")(app);
 
-// db.sequelize.sync().then(function () {
-//   app.listen(port, host, function() {
-//     console.log("Server started.......");
-//   });
+ db.sequelize.sync().then(function () {
+   app.listen(port, host, function() {
+    console.log("Server started.......");
+   });
+ });
+//app.listen(port, host, function() {
+ // console.log("Server started.......");
 // });
-app.listen(port, host, function() {
-  console.log("Server started.......");
-});
