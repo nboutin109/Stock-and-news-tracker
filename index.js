@@ -73,25 +73,6 @@ app.get('/members', isAuthenticated, function (req, res) {
   }, "fb");
 });
 
-// // Here we've add our isAuthenticated middleware to this route.
-// // If a user who is not logged in tries to access this route they will be redirected to the signup page
-// app.get("/members", isAuthenticated, function (req, res) {
-//   res.redirect("/");
-// });
-
-// In case the above "GET" doesn't work properly, you can use the one below instead.
-
-// app.get("", function (req, res) {
-//   if (req.user) {
-//     call_api(function (doneAPI) {
-//       res.render('home', {
-//         stock: doneAPI
-//       });
-//     }, "fb");
-//     } else {
-//       res.redirect("/login");
-//     }
-//   });
 app.get("/", function (req, res) {
   if (req.user) {
     res.redirect("/members")
