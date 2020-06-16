@@ -79,12 +79,21 @@ app.get('/members', isAuthenticated, function (req, res) {
   }, "fb");
 });
 
+//Create basic route
+app.get("/", function (req, res) {
+  if (req.user) {
+    res.redirect("/members")
+  } else {
+    res.redirect("/login");
+  }
+})
+
+
 // Create about page route 
 app.get('/about', function (req, res) {
   if (!req.user) {
     res.redirect("/login");
   } else {
-   
     res.render('about');
   }
 });
@@ -139,7 +148,7 @@ app.post('/news', async function (req, res) {
     const results = {};
     results.response = data;
     console.log(results);
-    res.render('portfolio', results);
+    res.render('news', results);
   }
 });
 
@@ -159,11 +168,11 @@ app.post('/', function (req, res) {
 require("./routes/api-routes.js")(app);
 require("./routes/html-routes.js")(app);
 
-db.sequelize.sync().then(function () {
-  app.listen(port, host, function() {
-    console.log("Listening on port %s. Visit http://localhost:%s/ in your browser.", port, port);
-  });
-});
-// app.listen(port, host, function() {
-//   console.log("Server started.......");
-// });
+ db.sequelize.sync().then(function () {
+   app.listen(port, host, function() {
+    console.log("Server started.......");
+   });
+ });
+//app.listen(port, host, function() {
+// console.log("Server started.......");
+//});
