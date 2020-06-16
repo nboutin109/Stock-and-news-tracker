@@ -90,17 +90,17 @@ app.get('/members', isAuthenticated, function (req, res) {
 
 // In case the above "GET" doesn't work properly, you can use the one below instead.
 
-// app.get('/', function (req, res) {
-//   if (!req.user) {
-//     res.redirect("/login");
-//   } else {
-//     call_api(function (doneAPI) {
-//       res.render('home', {
-//         stock: doneAPI
-//       });
-//     }, "fb");
-//   }
-// });
+app.get('/', function (req, res) {
+  if (!req.user) {
+    res.redirect("/login");
+  } else {
+    call_api(function (doneAPI) {
+      res.render('home', {
+        stock: doneAPI
+      });
+    }, "fb");
+  }
+});
 
 // Create about page route //
 app.get('/about', async function (req, res) {
