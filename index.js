@@ -80,19 +80,15 @@ app.get('/members', isAuthenticated, function (req, res) {
 });
 
 // Create about page route 
-app.get('/about', async function (req, res) {
+app.get('/about', function (req, res) {
   if (!req.user) {
     res.redirect("/login");
   } else {
-    const data = await fetchUserInfo(['fb', 'tsla', 'aapl']);
-    const results = {};
-    results.stocks = data;
-    console.log(results);
-    res.render('portfolio', results);
+   
+    res.render('about');
   }
 });
 
-// Creating portfolio page route
 app.get('/portfolio', async function (req, res) {
   if (!req.user) {
     res.redirect("/login");
@@ -105,7 +101,19 @@ app.get('/portfolio', async function (req, res) {
   }
 });
 
-//Creating news page route
+app.post('/portfolio', async function (req, res) {
+  if (!req.user) {
+    res.redirect("/login");
+  } else {
+    var sp = await req.body.port.split(",");
+    const data = await fetchUserInfo(sp);
+    const results = {};
+    results.stocks = data;
+    console.log(results);
+    res.render('portfolio', results);
+  }
+});
+
 app.get('/news', async function (req, res) {
   if (!req.user) {
     res.redirect("/login");
@@ -134,10 +142,20 @@ app.post('/', function (req, res) {
 require("./routes/api-routes.js")(app);
 require("./routes/html-routes.js")(app);
 
+<<<<<<< HEAD
 db.sequelize.sync().then(function () {
   app.listen(port, host, function() {
     console.log("Listening on port %s. Visit http://localhost:%s/ in your browser.", port, port);
   });
+=======
+ //db.sequelize.sync().then(function () {
+   //app.listen(port, host, function() {
+    //console.log("Server started.......");
+   //});
+ //});
+app.listen(port, host, function() {
+ console.log("Server started.......");
+>>>>>>> 58c130c7f71d18625f194f1bf8bebf273b95c86b
 });
 // app.listen(port, host, function() {
 //   console.log("Server started.......");
