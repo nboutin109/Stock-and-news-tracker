@@ -79,15 +79,6 @@ app.get('/members', isAuthenticated, function (req, res) {
   }, "fb");
 });
 
-app.get("/", function (req, res) {
-  if (req.user) {
-    res.redirect("/members")
-  } else {
-    res.redirect("/login");
-  }
-})
-
-
 // Create about page route 
 app.get('/about', async function (req, res) {
   if (!req.user) {
@@ -143,11 +134,11 @@ app.post('/', function (req, res) {
 require("./routes/api-routes.js")(app);
 require("./routes/html-routes.js")(app);
 
-// db.sequelize.sync().then(function () {
-//   app.listen(port, host, function() {
-//     console.log("Server started.......");
-//   });
-// });
-app.listen(port, host, function() {
-  console.log("Server started.......");
+db.sequelize.sync().then(function () {
+  app.listen(port, host, function() {
+    console.log("Listening on port %s. Visit http://localhost:%s/ in your browser.", port, port);
+  });
 });
+// app.listen(port, host, function() {
+//   console.log("Server started.......");
+// });
