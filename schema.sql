@@ -1,4 +1,4 @@
 -- Drops the userDB if it exists currently --
-DROP DATABASE IF EXISTS user_db;
+DROP DATABASE IF EXISTS userDB;
 -- Creates the "userDB" database --
-CREATE DATABASE user_db;
+CREATE DATABASE userDB;
