@@ -89,6 +89,7 @@ app.get('/about', function (req, res) {
   }
 });
 
+//Create portfolio page route
 app.get('/portfolio', async function (req, res) {
   if (!req.user) {
     res.redirect("/login");
@@ -101,6 +102,7 @@ app.get('/portfolio', async function (req, res) {
   }
 });
 
+//Create portfolio api/search
 app.post('/portfolio', async function (req, res) {
   if (!req.user) {
     res.redirect("/login");
@@ -114,11 +116,13 @@ app.post('/portfolio', async function (req, res) {
   }
 });
 
+//Create news api/search
 app.get('/news', async function (req, res) {
   if (!req.user) {
     res.redirect("/login");
   } else {
-    const data = await fetchNewsInfo(['facebook', 'tesla', 'apple']);
+    var input = await req.body.newsSearch.split(",");
+    const data = await fetchNewsInfo(input);
     const results = {};
     results.response = data;
     console.log(results);
