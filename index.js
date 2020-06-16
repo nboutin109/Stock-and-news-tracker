@@ -116,17 +116,30 @@ app.post('/portfolio', async function (req, res) {
   }
 });
 
-//Create news api/search
+//Create news page route
 app.get('/news', async function (req, res) {
   if (!req.user) {
     res.redirect("/login");
   } else {
-    var input = await req.body.newsSearch.split(",");
-    const data = await fetchNewsInfo(input);
+    const data = await fetchNewsInfo(['facebook', 'tesla', 'apple']);
     const results = {};
     results.response = data;
     console.log(results);
     res.render('news', results);
+  }
+});
+
+// Create news api/search
+app.post('/news', async function (req, res) {
+  if (!req.user) {
+    res.redirect("/login");
+  } else {
+    var sp = await req.body.newsSearch.split(",");
+    const data = await fetchNewsInfo(sp);
+    const results = {};
+    results.response = data;
+    console.log(results);
+    res.render('portfolio', results);
   }
 });
 
