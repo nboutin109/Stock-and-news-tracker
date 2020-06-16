@@ -20,16 +20,11 @@ app.use(session({ secret: "keyboard cat", resave: true, saveUninitialized: true 
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-// API key - pk_c31bdade5c47425fafb25d4831e9861e //
-// NYT API - QzKMS3OtIrTljBwjuddSWl23yFk5P70N
-
 // create call_api function //
 function call_api(finishedAPI, ticker) {
   request('https://cloud.iexapis.com/stable/stock/' + ticker + '/quote?token=pk_c31bdade5c47425fafb25d4831e9861e', { json: true }, (err, res, body) => {
     if (err) { return console.log(err); }
     if (res.statusCode === 200) {
-      //console.log(body);
       finishedAPI(body);
     };
   });
@@ -38,35 +33,31 @@ function call_api(finishedAPI, ticker) {
 //multiple API calls
 const fetchApiInfo = async (url) => {
   console.log(`Fetching ${url}`)
-  const stockInfo = await axios(url) // API call 
+  const stockInfo = await axios(url)
   return stockInfo.data;
 }
 // Iterates through array and return stock info
 const fetchUserInfo = async (tickers) => {
   const requests = tickers.map((ticker) => {
     const url = `https://cloud.iexapis.com/stable/stock/` + ticker + `/quote?token=pk_c31bdade5c47425fafb25d4831e9861e`
-    return fetchApiInfo(url) // Async function that fetches the user info.
+    return fetchApiInfo(url)
       .then((res) => {
         return res
       })
   })
-  return Promise.all(requests) // Waiting for all the requests to get resolved.
+  return Promise.all(requests)
 };
-//invoke fetch user info
-// fetchUserInfo([‘fb’, ‘tsla’, ‘aapl’])
-// .then(a => console.log(JSON.stringify(a)))
 
-
-
+// Iterates through array to return news info
 const fetchNewsInfo = async (tickers) => {
   const requests = tickers.map((ticker) => {
     const url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + ticker + '&facet_fields=source&facet=true&begin_date=20200601&end_date=20200625&api-key=QzKMS3OtIrTljBwjuddSWl23yFk5P70N'
-    return fetchApiInfo(url) // Async function that fetches the user info.
+    return fetchApiInfo(url)
       .then((res) => {
         return res
       })
   })
-  return Promise.all(requests) // Waiting for all the requests to get resolved.
+  return Promise.all(requests)
 };
 
 // Setting the handlebars middleware //
@@ -102,7 +93,7 @@ app.get('/members', isAuthenticated, function (req, res) {
 //   }
 // });
 
-// Create about page route //
+// Create about page route 
 app.get('/about', async function (req, res) {
   if (!req.user) {
     res.redirect("/login");
@@ -115,6 +106,7 @@ app.get('/about', async function (req, res) {
   }
 });
 
+// Creating portfolio page route
 app.get('/portfolio', async function (req, res) {
   if (!req.user) {
     res.redirect("/login");
@@ -127,6 +119,7 @@ app.get('/portfolio', async function (req, res) {
   }
 });
 
+//Creating news page route
 app.get('/news', async function (req, res) {
   if (!req.user) {
     res.redirect("/login");
@@ -150,7 +143,7 @@ app.post('/', function (req, res) {
 
 });
 
-// Requring all the routes in our code //
+// Requring additional routes in our code //
 
 require("./routes/api-routes.js")(app);
 require("./routes/html-routes.js")(app);
