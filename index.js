@@ -142,20 +142,10 @@ app.post('/', function (req, res) {
 require("./routes/api-routes.js")(app);
 require("./routes/html-routes.js")(app);
 
-<<<<<<< HEAD
 db.sequelize.sync().then(function () {
   app.listen(port, host, function() {
     console.log("Listening on port %s. Visit http://localhost:%s/ in your browser.", port, port);
   });
-=======
- //db.sequelize.sync().then(function () {
-   //app.listen(port, host, function() {
-    //console.log("Server started.......");
-   //});
- //});
-app.listen(port, host, function() {
- console.log("Server started.......");
->>>>>>> 58c130c7f71d18625f194f1bf8bebf273b95c86b
 });
 // app.listen(port, host, function() {
 //   console.log("Server started.......");
