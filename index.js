@@ -149,7 +149,7 @@ app.post('/news', async function (req, res) {
     const results = {};
     results.response = data;
     console.log(results);
-    res.render('portfolio', results);
+    res.render('news', results);
   }
 });
 
