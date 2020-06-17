@@ -71,7 +71,7 @@ app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
 // Set handlebar index get route //
-app.get('/members', isAuthenticated, function (req, res) {
+app.get('/members', function (req, res) {
   call_api(function (doneAPI) {
     res.render('home', {
       stock: doneAPI
@@ -81,75 +81,76 @@ app.get('/members', isAuthenticated, function (req, res) {
 
 //Create basic route
 app.get("/", function (req, res) {
-  if (req.user) {
+
+//   if (req.user) {
     res.redirect("/members")
-  } else {
-    res.redirect("/login");
-  }
-})
+//   } else {
+//     res.redirect("/login");
+//   }
+});
 
 
 // Create about page route 
 app.get('/about', function (req, res) {
-  if (!req.user) {
-    res.redirect("/login");
-  } else {
+  // if (!req.user) {
+  //   res.redirect("/login");
+  // } else {
     res.render('about');
-  }
+  // }
 });
 
 //Create portfolio page route
 app.get('/portfolio', async function (req, res) {
-  if (!req.user) {
-    res.redirect("/login");
-  } else {
+  // if (!req.user) {
+  //   res.redirect("/login");
+  // } else {
     const data = await fetchUserInfo(['fb', 'tsla', 'aapl']);
     const results = {};
     results.stocks = data;
     console.log(results);
     res.render('portfolio', results);
-  }
+  // }
 });
 
 //Create portfolio api/search
 app.post('/portfolio', async function (req, res) {
-  if (!req.user) {
-    res.redirect("/login");
-  } else {
+  // if (!req.user) {
+  //   res.redirect("/login");
+  // } else {
     var sp = await req.body.port.split(",");
     const data = await fetchUserInfo(sp);
     const results = {};
     results.stocks = data;
     console.log(results);
     res.render('portfolio', results);
-  }
+  // }
 });
 
 //Create news page route
 app.get('/news', async function (req, res) {
-  if (!req.user) {
-    res.redirect("/login");
-  } else {
+  // if (!req.user) {
+  //   res.redirect("/login");
+  // } else {
     const data = await fetchNewsInfo(['facebook', 'tesla', 'apple']);
     const results = {};
     results.response = data;
     console.log(results);
     res.render('news', results);
-  }
+  // }
 });
 
 // Create news api/search
 app.post('/news', async function (req, res) {
-  if (!req.user) {
-    res.redirect("/login");
-  } else {
+  // if (!req.user) {
+  //   res.redirect("/login");
+  // } else {
     var sp = await req.body.newsSearch.split(",");
     const data = await fetchNewsInfo(sp);
     const results = {};
     results.response = data;
     console.log(results);
     res.render('news', results);
-  }
+  // }
 });
 
 // Set handlebar index post route //
@@ -168,11 +169,11 @@ app.post('/', function (req, res) {
 require("./routes/api-routes.js")(app);
 require("./routes/html-routes.js")(app);
 
- db.sequelize.sync().then(function () {
+//  db.sequelize.sync().then(function () {
    app.listen(port, host, function() {
-    console.log("Server started.......");
+    console.log("Listening on port %s. Visit http://localhost:%s/ in your browser.", port, port);
    });
- });
+//  });
 //app.listen(port, host, function() {
 // console.log("Server started.......");
 //});

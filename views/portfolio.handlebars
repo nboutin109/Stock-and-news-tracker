@@ -1,40 +1,46 @@
+<div class="jumbotron">
+  <h1 class="text-center">Look up your stocks here!</h1>
+  <div class="text-center">Enter your stock tickers seperated by commas. For example: fb,tsla,aapl</div>
+  <hr style="width:66%">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-4">
+        <form class="form-inline my-2" action="/portfolio" method="POST">
+          <input class="form-control mr-sm-2" type="search" placeholder="Enter stock tickers" aria-label="Search"
+            name="port">
+          <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Lookup</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
 
-<div class=“jumbotron”>
-   <h1 class="text-center">Look up your stocks here!</h1>
-   <div class="text-center">Enter your stock tickers seperated by commas. For example: fb,tsla,aapl</div>
-    <hr style="width:66%">
-   <br>
-      <form class="form-inline my-2 my-lg-0" action="/portfolio" method="POST">
-      <input class="form-control mr-sm-2" type="search" placeholder="Enter stock tickers" aria-label="Search" name="port">
-      <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Lookup</button>
-       </form>
-
-        <br>
-   <h1 class=“display-2">Your Portfolio</h1>
-    <hr style="border-width: 2px;">
+<h1 class="display-2 text-center">Your Portfolio</h1>
+<hr style="border-width: 2px;">
 
 {{#each stocks}}
 
-<div class="container-fluid align-middle">
+<div class="container-fluid">
   <div class="row ">
-    <div class="col-md-6 col-lg-10 column">
+    <div class="col-md-8 offset-md-2">
       <div class="card">
-<div class="text-center">
-   <strong>{{ this.companyName }} ({{ this.symbol }})</strong>
-     <hr style="width:66%">
-<strong> Latest Price: </strong>${{ this.latestPrice }}<br>
-<strong> Previous Close: </strong>${{ this.previousClose }}<br>
-<strong> Percent Change: </strong>{{ this.changePercent }}<br>
-<strong> Market Cap: </strong>{{ this.marketCap }}<br>
-<strong> YTD Change: </strong>{{ this.ytdChange }}<br>
-<strong> 52-Week High: </strong>{{ this.week52High }}<br>
-<strong> 52-Week Low: </strong>{{ this.week52Low }}<br>
+        <div class="text-center">
+          <strong>{{ this.companyName }} ({{ this.symbol }})</strong>
+          <hr style="width:66%">
+          <strong> Latest Price: </strong>${{ this.latestPrice }}<br>
+          <strong> Previous Close: </strong>${{ this.previousClose }}<br>
+          <strong> Percent Change: </strong>{{ this.changePercent }}<br>
+          <strong> Market Cap: </strong>{{ this.marketCap }}<br>
+          <strong> YTD Change: </strong>{{ this.ytdChange }}<br>
+          <strong> 52-Week High: </strong>{{ this.week52High }}<br>
+          <strong> 52-Week Low: </strong>{{ this.week52Low }}<br>
 
-</div>
+        </div>
       </div>
+    </div>
   </div>
-  </div>
-  </div>
+</div>
 
 <br>
 
@@ -42,9 +48,9 @@
 
 {{/each}}
 <br>
-<footer> 
+<footer>
   <div class="bg-dark">
-  <div class="text-center text-light">Stock data provided by IEX Cloud</div>
-  <div class="text-center text-light">Powered by Bootstap</div>
+    <div class="text-center text-light">Stock data provided by IEX Cloud</div>
+    <div class="text-center text-light">Powered by Bootstap</div>
   </div>
-  </footer>
+</footer>
