@@ -1,7 +1,7 @@
 # Title
 Stock and News Application
 <img src="public\images\Capture30.png" height="250px" width="250px"></img>
-![Alt text](proj-2-stock-app\public\images\Capture30.png?raw=true "Title")
+[![name](https://github.com/nboutin109/Stock-and-news-tracker/public/images/Capture30.png)](https://stock-and-news-tracker.herokuapp.com/)
 ![alt text](https://github.com/nboutin109/Stock-and-news-tracker/public/images/Capture30.png)
 ![alt text](https://github.com/nboutin109/Stock-and-news-tracker/blob/master/Capture30.png?raw=true)
 
