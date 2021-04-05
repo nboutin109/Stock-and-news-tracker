@@ -1,6 +1,6 @@
 # Title
 Stock and News Application
-<img src="public\images\Capture30.png" height="250px" width="250px"></img>
+<img src="proj-2-stock-app\public\images\Capture30.png" height="250px" width="250px"></img>
 
 ## Purpose
 The purpose of this application is to provide the user with quick access to stock and news information on companies of their choice.
