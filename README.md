@@ -10,3 +10,6 @@ Uses Express for routing, Axios Node package for API calls, and Handlbars node p
 
 ## Usage
 To use this application, you can download and run with a local server on your device or use the live Heroku deployment here: https://stock-and-news-tracker.herokuapp.com/
+
+## Process overview
+Primarily run off the root level index.js which features code to run server and pulls the front and back-end routes from the routes folder. The public folder contains the HTML files that work in tandem with the Handlebar files from the views folder to render the user interface.
