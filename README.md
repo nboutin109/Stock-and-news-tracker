@@ -9,7 +9,7 @@ The purpose of this application is to provide the user with quick access to stoc
 Uses Express for routing, Axios Node package for API calls, and Handlbars node package to render front-end.
 
 ## Usage
-To use this application, you can download and run with a local server on your device or use the live Heroku deployment here: https://stock-and-news-tracker.herokuapp.com/
+To use this application, you can download and run with a local server on your device or use the live Heroku deployment here: <a href="https://stock-and-news-tracker.herokuapp.com/">https://stock-and-news-tracker.herokuapp.com/</a>
 
 ## Process overview
-Primarily run off the root level index.js which features code to run server and pulls the front and back-end routes from the routes folder. The public folder contains the HTML files that work in tandem with the Handlebar files from the views folder to render the user interface.
+Primarily run off the root level index.js which features code to run the server and pulls the front and back-end routes from the routes folder. The public folder contains the HTML files that work in tandem with the Handlebar files from the views folder to render the user interface.
