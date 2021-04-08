@@ -34,4 +34,4 @@
 </ul>
 
 ## Code Overview
-<p>Most of the work is done with the index.js file which sets up the server/routing, contains outside API calls, and sets up Handlebars user interface. The pages are then created from the public with the html files, and the views file which contains the matching handlebars for each page.</p>
+<p>Most of the work is done with the index.js file which sets up the server/routing, contains outside API calls, and sets up the Handlebars user interface. The pages are then created from the public folder html files, and the views folder which contains the matching handlebars for each page.</p>
